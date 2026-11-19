@@ -133,7 +133,41 @@ public class mocks {
 
 
 
+    /*
+    Problema (2.5 puntos). Dado un array de números enteros superiores a cero, se quiere
+    obtener el número más grande construido a partir de la concatenación de todos los
+    números del array.
+    SE PIDE: Implementar un algoritmo basado en el esquema Voraz que maximice el número resultado de concatenar todos los números del array. Usa la siguiente cabecera:
+    int numeroGrande(ArrayList<Numero> nums)
+    donde nums es una lista de números tipo Numero.
 
+     */
 
+    public int numeroGrande(ArrayList<Numero> nums){
+        Numero solucion = new Numero(0);
+        while(!nums.isEmpty()){
+            Numero n = seleccionarNumero(nums);
+            nums.remove(n);
+            solucion.concatRight(n);
+        }
+        return solucion.getNumInt();
+    }
+
+    private Numero seleccionarNumero(ArrayList<Numero> nums){
+        Numero mejor = null;
+        for(Numero n : nums){
+            if(mejor(n,mejor)){
+                mejor = n;
+            }
+        }
+        return mejor;
+    }
+    //tira true si es mejor A
+    private boolean mejor(Numero A, Numero B){
+        Numero p1= new Numero(A), p2= new Numero(B);
+        p1.concatLeft(B);
+        p2.concatLeft(A);
+        return p1.getNumInt() < p2.getNumInt();
+    }
 
 }
