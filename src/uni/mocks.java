@@ -74,4 +74,66 @@ public class mocks {
     Con tu resta, ambos empatan. Con la división, el segundo gana por goleada porque por cada euro que metes, te da muchísima más rentabilidad.
      */
 
+
+    /*
+    El avión en el que viajabas ha sufrido un terrible accidente y se ha estrellado
+    en las aguas cercanas a una isla desierta. Tú y un reducido grupo de supervivientes
+    habéis conseguido superar la peor parte, pero ahora estáis preocupados por sobrevivir al
+    hambre. Por suerte el avión transportaba alimentos para los pasajeros y tripulantes en
+    varios contenedores, por lo que necesitáis recuperar todo lo posible antes de que el
+    avión se hunda. El valor de cada contenedor puede calcularse en función de los días que
+    permite subsistir (debido a la cantidad de comida que almacena) y el tiempo que se tarda
+    en extraerlo del avión (por su tamaño o lugar de almacenaje). Como único experto en
+    algorítmica del grupo de supervivientes, has sido elegido para gestionar el rescate de
+    contenedores.
+
+    SE PIDE: Implementar un algoritmo basado en el esquema Voraz que maximice el
+    tiempo que podréis sobrevivir en la isla gracias a los días de subsistencia que os darán
+    los contenedores de alimentos que seáis capaces de rescatar antes de que se hunda el
+    avión. El algoritmo deberá tener la siguiente cabecera:
+    ArrayList<Contenedor> rescate(ArrayList<Contenedor> contenedores, int hundir)
+     */
+
+    private Contenedor seleccionarContenedor(ArrayList<Contenedor> contenedores){
+        Contenedor mejor = null;
+        for(Contenedor c : contenedores) {
+            if(mejor == null){
+                mejor = c;
+            }
+            float beneficio = c.getBeneficio();
+            if(beneficio > mejor.getBeneficio()){
+                mejor = c;
+            }
+            else if (mejor.getBeneficio() == beneficio){
+                if(c.getTiempo() < mejor.getTiempo()){
+                    mejor = c;
+                }
+            }
+        }
+        return mejor;
+    }
+
+
+    public ArrayList<Contenedor> rescate(ArrayList<Contenedor> contenedores, int hundir){
+        ArrayList<Contenedor> solucion = new ArrayList<>();
+        while(!contenedores.isEmpty() && hundir > 0){
+            Contenedor mejor = seleccionarContenedor(contenedores);
+            contenedores.remove(mejor);
+            if(hundir - mejor.getTiempo() > 0){
+                solucion.add(mejor);
+                hundir -= mejor.getTiempo();
+            }
+        }
+        if(solucion.size() > 0){
+            return solucion;
+        }else{
+            return null;
+        }
+    }
+
+
+
+
+
+
 }
