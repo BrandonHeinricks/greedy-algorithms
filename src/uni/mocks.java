@@ -170,4 +170,58 @@ public class mocks {
         return p1.getNumInt() < p2.getNumInt();
     }
 
+
+
+    /*
+
+    Problema (2.5 puntos). Has sido contratado como el publicista web de una casa de
+    subastas y una de tus tareas es elegir qué productos mostrar en primer plano del portal
+    web. Para cada sesión de subasta deseas exponer los productos más caros para atraer a
+    la clientela. Se te proporciona una lista de productos, donde de cada artículo se dispone
+    de su valor de salida (en euros) y la sesión en la que se subastará. Las sesiones se
+    identifican con un numero en el rango [0.. (numSesiones-1)]. Sólo se pueden mostrar
+    maxArtSesion artículos de una misma sesión, mientras que se quiere mostrar
+    exactamente numDeseados artículos en total (independientemente de la sesión).
+
+    SE PIDE: Implementar un algoritmo basado en el esquema Voraz que maximice el valor
+    total de los artículos mostrados, devolviendo el valor total alcanzado. El método tendrá
+    la siguiente cabecera:
+    int maxValor(ArrayList<ProductoSubasta> productos,
+    int maxArtSesion, int numDeseados, int numSesiones)
+    donde productos es la lista de productos, maxArtSesion es el número de artículos
+    máximos de cada sesión, numDeseados es el número de artículos que se desea exponer
+    y numSesiones es el número de sesiones que se celebrarán.
+     */
+
+
+    public int maxValor(ArrayList<ProductoSubasta> productos, int maxArtSesion, int numDeseados, int numSesiones){
+        int[] sesionesUsadas = new int[numSesiones];
+        int solucion = 0;
+        while(!productos.isEmpty() && numDeseados > 0){
+            ProductoSubasta prod = seleccionarProducto(productos);
+            productos.remove(prod);
+            if(maxArtSesion - 1 >= 0){
+                int sesion = prod.getSesion();
+                if(sesionesUsadas[sesion] < maxArtSesion){
+                    solucion += prod.getValor();
+                    sesionesUsadas[sesion]++;
+                    numDeseados--;
+                }
+            }
+        }
+        return solucion;
+
+    }
+    private ProductoSubasta seleccionarProducto(ArrayList<ProductoSubasta> productos){
+        ProductoSubasta mejor = null;
+        for(ProductoSubasta p : productos){
+            if(mejor == null){
+                mejor = p;
+            }
+            if(mejor.getValor() < p.getValor()){
+                mejor = p;
+            }
+        }
+        return mejor;
+    }
 }
