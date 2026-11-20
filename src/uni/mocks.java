@@ -224,4 +224,56 @@ public class mocks {
         }
         return mejor;
     }
+
+
+
+    /*
+    El juego de la rana (en España), juego del sapo (en Perú,
+    Uruguay, Ecuador, Bolivia y Argentina), o simplemente rana (en
+    Colombia); es un juego de lanzamiento de precisión múltiple donde
+    se intenta introducir un determinado número de fichas, argollas o
+    discos de metal en los múltiples agujeros que existen en la mesa del
+    sapo o rana.
+    Si bien las partidas habitualmente consisten en 10 tiradas, donde
+    el jugador que consigue la máxima puntuación gana, en este caso
+    se ha decidido modificar el juego, y se trata de conseguir una
+    puntuación concreta, usando el menor número de discos posibles.
+
+    Dada la mesa de juego que se muestra en la imagen (que permite
+    conseguir: {5,10,15,25,50} puntos por disco), se pide implementar
+    un algoritmo que muestre como resultado a qué secciones de la
+    mesa (agujeros) deben tirarse los discos para conseguir obtener la
+    puntuación deseada, teniendo en cuenta que en el mismo agujero de
+    la mesa pueden tirarse tantos discos como sea necesario.
+    Implementar un algoritmo en Java (numDiscosGreedy), basado en un esquema voraz, que,
+    dada una puntuación concreta y una mesa de juego con valores desordenados, devuelva
+    cuántos discos deben tirarse y a qué agujero, teniendo en cuenta que el número de discos a
+    tirar debe ser el mínimo posible
+     */
+    public ArrayList<AgujeroRana> numdiscosGreedy(ArrayList<Integer> valoresRana, int puntuacion){
+        ArrayList<AgujeroRana> solucion = new ArrayList<>();
+        while(!valoresRana.isEmpty() && puntuacion > 0){
+            int mejor = seleccionarRana(valoresRana);
+            valoresRana.remove(Integer.valueOf(mejor));
+            int cantidad = puntuacion/mejor;
+            if(cantidad > 0){
+                AgujeroRana rana = new AgujeroRana(mejor, cantidad);
+                solucion.add(rana);
+                puntuacion -= (mejor*cantidad);
+            }
+        }
+        if(puntuacion == 0){
+            return solucion;
+        }
+        else return null;
+    }
+    private int seleccionarRana(ArrayList<Integer> valoresRana ){
+        int mejor = Integer.MIN_VALUE;
+        for(int v : valoresRana){
+            if(v > mejor){
+                mejor = v;
+            }
+        }
+        return mejor;
+    }
 }
