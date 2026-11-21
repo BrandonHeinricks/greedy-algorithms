@@ -363,6 +363,49 @@ public class mocks {
         }
         return mejor;
     }
+    /*
+
+   Nos han encargado el seguimiento de un evento deportivo. Nos piden
+    reconstruir dicho evento al completo a partir de varios clips con grabaciones de video. Cada clip
+    cubre un periodo concreto del evento desde un instante de inicio -start- hasta otro de finalización -
+    end-, tal que [start, end). Considera que el evento empezó en el instante 0 y concluyó exactamente
+    tras h horas.
+    SE PIDE: Implementar un algoritmo basado en el esquema Voraz que minimice el número de clips
+    necesarios para reconstruir el evento completo. Si no fuera posible cubrir el evento al completo
+    con los clips disponibles, el algoritmo debe devolver null. el método implementado deberá tener la
+    siguiente cabecera:
+     */
+
+    public ArrayList<Clip> minimoClip(int h, ArrayList<Clip> candidatos){
+        ArrayList<Clip> solucion = new ArrayList<>();
+        boolean flagImposible = false;
+        int s = 0;
+        while( !candidatos.isEmpty() && s < h && flagImposible == false){
+            Clip seleccionado = seleccionarClip(candidatos, s);
+            if(seleccionado == null){
+                flagImposible = true;
+            }
+            else {
+                candidatos.remove(seleccionado);
+                solucion.add(seleccionado);
+                s = seleccionado.getEnd();
+            }
+        }
+        if(s >= h){
+            return solucion;
+        }else return null;
+    }
 
 
+    private Clip seleccionarClip(ArrayList<Clip> candidatos, int s){
+        Clip mejor = null;
+        for(Clip c : candidatos){
+            if(c.getStart() <= s && s < c.getEnd()){
+                if(mejor == null || c.getEnd() > mejor.getEnd()){
+                    mejor = c;
+                }
+            }
+        }
+        return mejor;
+    }
 }
