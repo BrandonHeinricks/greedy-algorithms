@@ -276,4 +276,52 @@ public class mocks {
         }
         return mejor;
     }
+
+
+
+    /*
+    Se quiere formar una torre de objetos con los cinco sólidos platónicos(1)
+    (tetraedros, hexaedros (cubos), octaedros, dodecaedros e icosaedros) que en total
+    sumarán N caras. Por ejemplo, una torre formada por tres solidos: [1 icosaedro, 1
+    dodecaedro, 1 tetraedro] sumaría un total de 36 caras. Para formar una torre válida, la
+    base y los elementos intermedios deben poder sostenerse sobre una cara superior y otra
+    inferior, es decir un sólido no puede apoyarse sobre una arista. Es por ello que en una
+    torre válida el tetraedro solo podrá estar en la cima y sólo podrá haber 1 como máximo.
+
+    Aclaración: La torre no tiene por qué ser estable desde un punto de vista físico.
+
+    SE PIDE: Implementar un algoritmo basado en el esquema Voraz que dado un numero
+    v de caras, devuelva cuántos objetos de cada tipo han sido necesarios. En caso de que
+    el problema no tenga solución se devolverá null.
+     */
+
+
+    public int[] greedyTower(int v){
+        //no hace falta unmetodo de seleccion de candidatos si ya tenemos una lista ordenada por el mejor primero ,
+        // en este caso el mejor es el de mayor caras
+        int[] solucion = new int[5];
+        //llenar la solucion con cero en todas sus casillas;
+        for(int i = 0; i< solucion.length; i++){
+            solucion[i] = 0;
+        }
+        int[] candidatos = {20,12,8,6};
+        int k = 0;
+        while(k < candidatos.length && v > 0){
+            int cantidad = v/candidatos[k];
+            v -= (cantidad*candidatos[k]);
+            solucion[solucion.length - k -1] = cantidad;
+            k++;
+        }
+        if(v == 4){
+           solucion[4] = 1;
+           v -= 4;
+        }
+        if(v == 0){
+            return solucion;
+        }else return null;
+    }
+
+
+
+
 }
