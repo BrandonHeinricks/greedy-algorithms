@@ -408,4 +408,54 @@ public class mocks {
         }
         return mejor;
     }
+
+
+
+
+
+    /*
+    Nos dan un vector de N números enteros, y un número K. Podemos
+    transformar el vector multiplicando por -1 uno de sus elementos. Deseamos
+    transformar el vector K veces exactas de manera que la suma de sus elementos
+    sea máxima.
+
+    Ejemplo:
+        K: 4
+        vector:   [ -2 |  0 | 5 | -1 | 2 ]
+
+    La solución es:
+                  [  2 |  0 | 5 |  1 | 2 ]
+
+    Detalle de la solución:
+        Inicial:  [ -2 |  0 | 5 | -1 | 2 ]
+        Paso 1:   [ +2 |  0 | 5 | -1 | 2 ]
+        Paso 2:   [  2 |  0 | 5 | +1 | 2 ]
+        Paso 3:   [  2 | -0 | 5 |  1 | 2 ]
+        Paso 4:   [  2 | +0 | 5 |  1 | 2 ]  <-- Solución final
+
+
+    Se pide implementar en Java un algoritmo basado en un esquema voraz que
+    resuelva1 el problema (esto es que encuentre el vector de suma máxima tras K
+    transformaciones) con complejidad en tiempo2 O(N·K) donde N es el tamaño del
+    vector y K el número de transformaciones pedidas:
+*/
+
+
+    public int[] vectorTransformado(int[] vector, int k){
+        while(k > 0){
+            int indiceSeleccionado = seleccionarIndice(vector);
+            vector[indiceSeleccionado] = vector[indiceSeleccionado] * -1;
+            k--;
+        }
+        return vector;
+    }
+    private int seleccionarIndice(int[] lista) {
+        int indiceMejor = 0; // Empezamos asumiendo que el primero es el mejor
+        for (int i = 1; i < lista.length; i++) {
+            if (lista[i] < lista[indiceMejor]) {
+                indiceMejor = i;
+            }
+        }
+        return indiceMejor;
+    }
 }
