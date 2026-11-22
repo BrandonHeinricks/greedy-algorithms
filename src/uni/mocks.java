@@ -585,6 +585,111 @@ public class mocks {
     }
 
 
+    /*
+   Problema. El I.E.S. Almudena Grandes necesita crear los nuevos grupos de alumnos de
+    1º de la ESO. Para ello debe distribuir un grupo desordenado de N nuevos estudiantes,
+    que provienen de diferentes centros escolares de la zona, en grupos de un tamaño
+    máximo de L alumnos/grupo (numMaxAlumnos). De cada estudiante se dispone del
+    nombre y apellidos, el género (femenino/masculino) y su nota media (expresada como un
+    número entero entre el 5 y el 10). Se desea implementar un algoritmo, basado en una
+    estrategia voraz, que permita crear los nuevos grupos de alumnos, de forma que tengan
+    una nota media de grupo lo más parecida posible.
+     */
+    private ArrayList<Grupo> crearGrupos(ArrayList<Estudiante> listaEst , int numMaxAlumnos){
+        int n = listaEst.size() / numMaxAlumnos;
+        if(listaEst.size() % numMaxAlumnos != 0){
+            n++;
+        }
+        ArrayList<Grupo> listGrupo = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            Grupo g = new Grupo(numMaxAlumnos);
+            listGrupo.add(g);
+        }
+        return listGrupo;
+    }
+    private int indiceDeMenorValor(double[] grupos, ArrayList<Grupo> solucion){
+        int menor = -1;
+        for(int i = 0; i < grupos.length; i++){
+            if(solucion.get(i).getAlumnosRestantes() > 0){
+                if(menor == -1 || grupos[i] < grupos[menor] ){
+                    menor = i;
+                }
+            }
+        }
+        return menor;
+    }
+    public ArrayList<Grupo> mezclaEstudiantes(ArrayList<Estudiante> listaEst , int numMaxAlumnos){
+        ArrayList<Grupo> solucion = crearGrupos(listaEst, numMaxAlumnos);
+        double[] notas = new double[solucion.size()];
+        while(!listaEst.isEmpty()){
+            Estudiante seleccionado = seleccionarEstudiante(listaEst);
+            listaEst.remove(seleccionado);
+            int indice = indiceDeMenorValor(notas, solucion);
+            solucion.get(indice).aniadeAlumno(seleccionado);
+            notas[indice] += seleccionado.getNota();
+        }
+        return solucion;
+    }
+    private Estudiante seleccionarEstudiante(ArrayList<Estudiante> listaEst ){
+        Estudiante mejor = null;
+        for(Estudiante e : listaEst){
+            if(mejor == null){
+                mejor = e;
+            }
+            else if(e.getNota() > mejor.getNota()){
+                mejor = e;
+            }
+        }
+        return mejor;
+    }
 
+    /*
 
+    Voraces. Diseñar e implementar el método boolean hayDivision(int[]
+    valores) en Java basado en el esquema voraz, que permita determinar si, dado un
+    conjunto de números enteros positivos mayores que 0, existen dos subconjuntos
+    que sumen exactamente el mismo valor, y que cada uno contenga la mitad de los
+    números del vector valores. Por ejemplo, dado el vector valores = {5, 8, 7, 1, 3, 2},
+    el algoritmo debería devolver true, dado que 8+3+2 = 5+7+1; dado el vector valores
+    = {1, 6, 8, 1}, el algoritmo debería devolver false
+     */
+
+    public boolean hayDivision(int[] valores){
+        int s1 = 0; int s2 = 0;
+        int c1 = 0; int c2 = 0;
+        boolean[] usados = new boolean[valores.length];
+        if(valores.length % 2 != 0){
+            return false;
+        }else{
+            for(int i = 0; i < valores.length; i++){
+                int seleccionado = seleccionarValor(valores, usados);
+                if(s1 <= s2 ){
+                    s1 += seleccionado;
+                    c1++;
+                }
+                else{
+                    s2 += seleccionado;
+                    c2++;
+                }
+            }
+        }
+        if(s1 == s2 && c1 == c2){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private int seleccionarValor(int[] valores, boolean[] usados) {
+        int mejorIndice = -1;
+        for (int i = 0; i < valores.length; i++) {
+            if (!usados[i]) {
+                if (mejorIndice == -1 || valores[i] > valores[mejorIndice]) {
+                    mejorIndice = i;
+                }
+            }
+        }
+        usados[mejorIndice] = true;
+        return valores[mejorIndice];
+    }
 }
