@@ -458,4 +458,61 @@ public class mocks {
         }
         return indiceMejor;
     }
+
+
+    /*
+    Se pretende transportar una serie de productos (p1, p2,p3, …,pN) cada uno
+    con un peso característico, desde la estación espacial conjunta hasta la base lunar
+    internacional. Para ello se dispone de tres naves de carga a las que denominaremos n1,
+    n2 y n3.
+
+    Se pide implementar un algoritmo en Java basado en un esquema Voraz que distribuya
+    la carga entre las tres naves de la manera mas uniforme posible en lo relativo al peso.
+    El método implementado deberá tener la siguiente cabecera:
+    void distribuyeCarga( ArrayList<Producto> productos, ArrayList<Producto> n1,
+     ArrayList<Producto> n2, ArrayList<Producto> n3);
+    El parámetro productos representa un ArrayList que incluye los Objetos del tipo
+    Producto a transportar a la Base Lunar y en los ArrayList n1, n2 y n3 se devolverá la
+    relación de los productos a cargar en cada nave.
+     */
+    public void distribuyeCarga( ArrayList<Producto> productos, ArrayList<Producto> n1, ArrayList<Producto> n2, ArrayList<Producto> n3){
+        int totalA=0, totalB=0, totalC=0;
+        Producto p;
+        while(!productos.isEmpty()){
+            p = seleccionarProducto(productos);
+            productos.remove(p);
+            if (totalA <= totalB) // la nave n1 tiene menor carga que la nave n2
+            {
+                if (totalA<=totalC) { // n1 es la que menor carga tiene
+                    n1.add(p);
+                    totalA = totalA + p.getPeso();
+                }
+                else { // n3 es la que menor carga tiene
+                    n3.add(p);
+                    totalC = totalC + p.getPeso();
+                }
+            }
+            else if (totalB <= totalC) { // n2 es la que menor carga tiene
+                n2.add(p);
+                totalB = totalB + p.getPeso();
+            }
+            else { // n3 es la que menor carga tiene
+                n3.add(p);
+                totalC = totalC + p.getPeso();
+            }
+        }
+    }
+
+    private Producto seleccionarProducto(ArrayList<Producto> lista){
+        Producto mejor = null;
+        for(Producto p : lista){
+            if(mejor == null){
+                mejor = p;
+            }
+            else if(mejor.getPeso() < p.getPeso()){
+                mejor = p;
+            }
+        }
+        return mejor;
+    }
 }
