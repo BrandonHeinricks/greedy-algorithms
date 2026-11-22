@@ -692,4 +692,64 @@ public class mocks {
         usados[mejorIndice] = true;
         return valores[mejorIndice];
     }
+
+
+
+
+    /*
+    Dado un array de N números no negativos y un entero
+    positivo k (donde 0 < k < N) repartir los elementos del array en dos conjuntos
+    disjuntos, A y B, de tamaño k y N-k respectivamente. El objetivo es encontrar el
+    reparto que maximice la diferencia absoluta entre la suma de los elementos de
+    ambos conjuntos (esto es la máxima disparidad posible entre los conjuntos A y
+    B).
+
+
+    Ejemplo: Para k=2 y vector:
+        [ 8 | 4 | 5 | 2 | 10 ]
+
+
+    El reparto más desigual sería A={4,2} y B={8,5,10}, cuya diferencia en valor
+    absoluto es |(4+2) - (8+5+10)|=17
+
+    a) Diseñar un algoritmo que, utilizando una estrategia Voraz, resuelva el
+    problema de la máxima disparidad. La función debe devolver la diferencia en
+    valor absoluto entre los dos conjuntos resultantes:
+    int repartoMaxDisparidad(int[] vector, int k)
+    El algoritmo debe garantizar que la solución es la óptima1 y debe tener una
+    complejidad2 O(N2) en el caso peor.
+     */
+
+    public int repartoMaxDisparidad(int[] vector, int k) {
+        int s1 = 0;
+        int s2 = 0;
+        int menorTamano = Math.min(k, vector.length - k);
+        boolean[] usados = new boolean[vector.length];
+
+        for (int i = 0; i < vector.length; i++) {
+            int valorSeleccionado = seleccionarMenorValor(vector, usados);
+            if (i < menorTamano) {
+                s1 += valorSeleccionado;
+            } else {
+                s2 += valorSeleccionado;
+            }
+        }
+        return Math.abs(s1 - s2);
+    }
+
+    private int seleccionarMenorValor(int[] vector, boolean[] usados){
+       int indiceMejor = Integer.MAX_VALUE;
+       for(int i = 0; i < vector.length; i++){
+           if(usados[i] == false){
+               if(indiceMejor == Integer.MAX_VALUE || vector[i] < vector[indiceMejor]){
+                   indiceMejor = i;
+               }
+           }
+       }
+        usados[indiceMejor] = true;
+        return vector[indiceMejor];
+    }
+
 }
+
+
