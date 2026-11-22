@@ -198,7 +198,7 @@ public class mocks {
         int[] sesionesUsadas = new int[numSesiones];
         int solucion = 0;
         while(!productos.isEmpty() && numDeseados > 0){
-            ProductoSubasta prod = seleccionarProducto(productos);
+            ProductoSubasta prod = seleccionarProductoSubasta(productos);
             productos.remove(prod);
             if(maxArtSesion - 1 >= 0){
                 int sesion = prod.getSesion();
@@ -212,7 +212,7 @@ public class mocks {
         return solucion;
 
     }
-    private ProductoSubasta seleccionarProducto(ArrayList<ProductoSubasta> productos){
+    private ProductoSubasta seleccionarProductoSubasta(ArrayList<ProductoSubasta> productos){
         ProductoSubasta mejor = null;
         for(ProductoSubasta p : productos){
             if(mejor == null){
@@ -515,4 +515,76 @@ public class mocks {
         }
         return mejor;
     }
+
+    /*
+
+    La empresa encargada de organizar el
+    “Juego del Calamar” necesita generar
+    automáticamente el conjunto de equipos para la
+    siguiente prueba: ‘Tira y Afloja”. Se desea
+    implementar una estrategia voraz que permita
+    combinar los concursantes de la forma más equilibrada posible, es decir crear equipos que
+    tengan fuerzas lo más similares posibles y así aumentar la emoción de la prueba.
+
+    Para ello se requiere un algoritmo que dado el listado C de concursantes supervivientes
+    genere el conjunto de 2 equipos, donde el número final de concursantes de cada equipo
+    puede ser distinto, pero todos los concursantes deben formar parte de alguno de los dos
+    equipos. De cada concursante se conoce: Ci = {identificador, edad, peso, género}, donde
+    el identificador es un número entero, la edad se ha distribuido en 4 categorías (Joven(1):
+    hasta 30 años; Adulto(2): hasta 45 años; Senior(3): hasta 60 años; Anciano(4): ≥ 60
+    años), el peso se ha distribuido en 3 categorías (Pesado(1): ≥ 75kg; Medio(2): hasta 75 kg;
+    Ligero(3): hasta 63 kg) y el género se ha distribuido en 2 categorías (true: femenino; false:
+    masculino). De esta manera un concursante se representará por la tupla C1
+    ={456,2,2,false} o C2 = {067,2,3,true}, C1 representaría a un hombre menor de 45 años
+    con un peso inferior a 75 kg, y C2 a una mujer de menos de 45 años con un peso inferior
+    a 63 Kg respectivamente.
+
+    La fuerza de una persona se calculará como: fi(e,p,g) = (1/ei) * (1/pi) * gi, donde gi = 1.3
+    para los hombres (g=false), y 1 para las mujeres (g=true). Es decir, fC1(2,2,false)= 1/2 *
+    1/2 * 1.3 = 0.325; y fC2(2,3,true)= 1/2 * 1/3 * 1 = 0.17.
+     */
+
+    public void crearEquiposVoraz(ArrayList<Concursante> supervivientes, ArrayList<Concursante> equipo1, ArrayList<Concursante> equipo2) {
+        double e1 = 0.0 ; double e2 = 0.0;
+        while(!supervivientes.isEmpty()){
+            Concursante seleccionado = seleccionarConcursante(supervivientes);
+            supervivientes.remove(seleccionado);
+            if(e1 <= e2){
+                equipo1.add(seleccionado);
+                e1 += conseguirFuerza(seleccionado);
+            }else{
+                equipo2.add(seleccionado);
+                e2 += conseguirFuerza(seleccionado);
+            }
+        }
+    }
+    private Concursante seleccionarConcursante(ArrayList<Concursante> supervivientes){
+        Concursante mejor = null;
+        for(Concursante c : supervivientes){
+            if(mejor == null){
+                mejor = c;
+            }else if(conseguirFuerza(c) > conseguirFuerza(mejor)){
+                mejor = c;
+            }
+        }
+        return mejor;
+    }
+    private double conseguirFuerza(Concursante concursante){
+        double fuerza = 0.0;
+        int e = concursante.getEdad();
+        int p = concursante.getPeso();
+        boolean genero = concursante.isGenero();
+        double g = 1;
+        if(genero == false){
+            g += 0.3;
+        }
+
+        fuerza = ((1.0/e) * (1.0/p) * g);
+
+        return fuerza;
+    }
+
+
+
+
 }
